@@ -13,6 +13,12 @@ public class Inscripcion {
         this.fechaInscripcion = LocalDate.now();
     }
 
+    public Inscripcion(Estudiante estudiante){
+        this.estudiante = estudiante;
+        this.curso = null;
+        this.fechaInscripcion = LocalDate.now();
+    }
+
     public Estudiante getEstudiante() {
         return estudiante;
     }

@@ -47,5 +47,21 @@ public class Curso {
     public void setEstudiantes(List<Estudiante> estudiantes) {
         this.estudiantesInscritos = estudiantes;
     }
+
+    public boolean isCursoLLeno(){
+        if(this.capacidad == estudiantesInscritos.size()){
+            return true;
+        }
+
+        return false;
+    }
+
+    //TODO: posible problema, borrar?
+    @Override
+    public String toString() {
+        return "Curso [codigo=" + codigo + ", nombre=" + nombre + ", capacidad=" + capacidad + "]";
+    }
     
 }
+
+

@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Estudiante {
+    private static int generadorId = 1;
     private int id;
     private String nombre;
     private String email;
     private List<Curso> cursosIncritos = new ArrayList<>();
 
-    public Estudiante(int id, String nombre, String correo) {
-        this.id = id;
+    public Estudiante(String nombre, String correo) {
+        this.id = generadorId++;
         this.nombre = nombre;
         this.email = correo;
     }
@@ -49,6 +50,11 @@ public class Estudiante {
 
     public void agregarCurso(Curso curso){
         this.cursosIncritos.add(curso);
+    }
+
+    @Override
+    public String toString() {
+        return "Estudiante [id=" + id + ", nombre=" + nombre + ", email=" + email + "\n\n";
     }
 
     
