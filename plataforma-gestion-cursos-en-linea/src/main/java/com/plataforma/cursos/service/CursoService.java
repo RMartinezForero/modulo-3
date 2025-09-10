@@ -12,9 +12,11 @@ public class CursoService {
     private static final Logger logger = LogManager.getLogger(CursoService.class);
     private List<Curso> cursosDisponibles = new ArrayList<>();
 
-    public void agregarCurso(String nombre, int capacidad) {
-        this.cursosDisponibles.add(new Curso(nombre, capacidad));
+    public Curso agregarCurso(String nombre, int capacidad) {
+        Curso curso = new Curso(nombre, capacidad);
+        this.cursosDisponibles.add(curso);
         logger.info("Curso " + nombre + " creado.");
+        return curso;
     }
 
     public void listarCursos() {
