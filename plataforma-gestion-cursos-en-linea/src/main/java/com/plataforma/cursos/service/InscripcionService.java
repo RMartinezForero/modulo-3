@@ -14,34 +14,37 @@ import com.plataforma.cursos.model.Inscripcion;
 public class InscripcionService {
     private static final Logger logger = LogManager.getLogger(InscripcionService.class);
     private List<Inscripcion> inscripciones;
+    private List<Estudiante> estudiantes;
     private CursoService cursoService;
 
     public InscripcionService(CursoService cursoService) {
         this.cursoService = cursoService;
         this.inscripciones = new ArrayList<>();
+        this.estudiantes = new ArrayList<>();
     }
 
     private boolean estudianteExiste(Estudiante estudiante) {
-        for (Inscripcion inscripcion : inscripciones) {
+        for (Estudiante e : estudiantes) {
 
-            if (inscripcion.getEstudiante().getCorreo().equals(estudiante.getCorreo())) {
+            if (e.getCorreo().equals(estudiante.getCorreo())) {
                 return true;
             }
         }
         return false;
     }
 
-    public void inscribirEstudianteAlSistema(Estudiante estudiante) {
+    public Estudiante inscribirEstudianteAlSistema(Estudiante estudiante) {
 
         if (estudianteExiste(estudiante)) {
             System.out.println("El estudiante ya se encuentra registrado en el sistema.");
             logger.warn("El estudiante " + estudiante.getNombre() + " ya se encuentra registrado en el sistema.");
-            return;
+            return null;
         }
 
-        inscripciones.add(new Inscripcion(estudiante));
+        estudiantes.add(estudiante);
         System.out.println("Estudiante inscrito exitosamente.");
         logger.info("El estudiante " + estudiante.getNombre() + " fue inscrito.");
+        return estudiante;
     }
 
     public void inscribirEstudianteACurso(int codigoCurso, Estudiante estudiante)
@@ -91,7 +94,6 @@ public class InscripcionService {
         inscripciones.add(new Inscripcion(estudiante, cursoDestino));
         logger.info("Estudiante " + estudiante.getNombre() + " inscrito al curso " + cursoDestino.getNombre()
                 + " exitosamente");
-
     }
 
     public void listarInscripcionesPorEstudiante(Estudiante estudiante) throws EstudianteNoEncontradoException {
@@ -105,7 +107,7 @@ public class InscripcionService {
             if (estudianteInscrito != null && estudiante != null) {
 
                 if (estudiante.getCorreo().equals(estudianteInscrito.getCorreo())) {
-                    
+
                     if (inscripcion.getCurso() != null) {
                         System.out.println(inscripcion.getCurso());
                         inscrito = true;
@@ -121,4 +123,7 @@ public class InscripcionService {
         }
     }
 
+    public List<Inscripcion> getInscripciones() {
+        return new ArrayList<>(this.inscripciones);
+    }
 }
