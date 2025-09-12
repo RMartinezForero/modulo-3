@@ -24,6 +24,10 @@ public class InscripcionService {
     }
 
     private boolean estudianteExiste(Estudiante estudiante) {
+        if (estudiante == null) {
+            return false;
+        }
+
         for (Estudiante e : estudiantes) {
 
             if (e.getCorreo().equals(estudiante.getCorreo())) {
@@ -34,6 +38,12 @@ public class InscripcionService {
     }
 
     public Estudiante inscribirEstudianteAlSistema(Estudiante estudiante) {
+
+        if (estudiante == null) {
+            logger.warn("El estudiante " + estudiante + " no tiene datos. No puede inscribirse al sistema.");
+            System.out.println("El estudiante " + estudiante + " no tiene datos. No puede inscribirse al sistema.");
+            return null;
+        }
 
         if (estudianteExiste(estudiante)) {
             System.out.println("El estudiante ya se encuentra registrado en el sistema.");
@@ -52,9 +62,8 @@ public class InscripcionService {
 
         // 1. comprueba si existe el estudiante en el sistema
         if (!estudianteExiste(estudiante)) {
-            logger.error("El estudiante " + estudiante.getNombre() + " no se encuentra registrado en el sistema.");
-            throw new EstudianteNoEncontradoException("El estudiante " + estudiante.getNombre() +
-                    " no se encuentra registrado en el sistema.");
+            logger.error("El estudiante no se encuentra registrado en el sistema.");
+            throw new EstudianteNoEncontradoException("El estudiante no se encuentra registrado en el sistema.");
         }
 
         // 2. comprueba si el curso existe
@@ -96,31 +105,34 @@ public class InscripcionService {
                 + " exitosamente");
     }
 
-    public void listarInscripcionesPorEstudiante(Estudiante estudiante) throws EstudianteNoEncontradoException {
-        boolean inscrito = false;
-        Estudiante estudianteInscrito;
-        System.out.println("Cursos del estudiante " + estudiante.getNombre() + ": ");
+    public List<Curso> listarInscripcionesPorEstudiante(Estudiante estudiante)
+            throws EstudianteNoEncontradoException {
 
-        for (Inscripcion inscripcion : this.inscripciones) {
-            estudianteInscrito = inscripcion.getEstudiante();
-
-            if (estudianteInscrito != null && estudiante != null) {
-
-                if (estudiante.getCorreo().equals(estudianteInscrito.getCorreo())) {
-
-                    if (inscripcion.getCurso() != null) {
-                        System.out.println(inscripcion.getCurso());
-                        inscrito = true;
-                    }
-                }
-            }
-
-        }
-
-        if (inscrito == false) {
-            logger.error("El estudiante " + estudiante.getNombre() + " no tiene inscripciones.");
+        if (estudiante == null) {
+            logger.error("El estudiante no tiene inscripciones.");
             throw new EstudianteNoEncontradoException("El estudiante no tiene inscripciones.");
         }
+
+        List<Curso> cursos = new ArrayList<>();
+
+        for (Inscripcion inscripcion : this.inscripciones) {
+            Estudiante estudianteInscrito = inscripcion.getEstudiante();
+
+            if (estudianteInscrito != null &&
+                    estudiante.getCorreo().equals(estudianteInscrito.getCorreo()) &&
+                    inscripcion.getCurso() != null) {
+
+                cursos.add(inscripcion.getCurso());
+            }
+        }
+
+        if (cursos.isEmpty()) {
+            logger.error("El estudiante " + estudiante.getNombre() + " no tiene inscripciones.");
+            throw new EstudianteNoEncontradoException(
+                    "El estudiante " + estudiante.getNombre() + " no tiene inscripciones.");
+        }
+
+        return cursos;
     }
 
     public List<Inscripcion> getInscripciones() {
