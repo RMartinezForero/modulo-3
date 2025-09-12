@@ -148,7 +148,7 @@ public class InscripcionServiceTest {
 
         CursoService cursoService = new CursoService();
         InscripcionService inscripcionService = new InscripcionService(cursoService);
-        Curso curso = cursoService.agregarCurso("biologia", 100);
+        cursoService.agregarCurso("biologia", 100);
         Estudiante estudiante = new Estudiante("ramon", "correo1@correo.com");
         inscripcionService.inscribirEstudianteAlSistema(estudiante);
         inscripcionService.inscribirEstudianteACurso(1, estudiante);

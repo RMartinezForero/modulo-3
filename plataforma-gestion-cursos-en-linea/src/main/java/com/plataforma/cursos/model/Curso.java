@@ -56,7 +56,6 @@ public class Curso {
         return false;
     }
 
-    //TODO: posible problema, borrar?
     @Override
     public String toString() {
         return "Curso [codigo=" + codigo + ", nombre=" + nombre + ", capacidad=" + capacidad + "]";
